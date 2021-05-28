@@ -1,0 +1,11 @@
+node_modules
+dist
+*.log
+.idea
+coverage
+src/public/docs
+.nyc_output
+.history
+.DS_Store
+yours.xero.key.pem
+/ssl/*.pem

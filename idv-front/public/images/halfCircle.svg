@@ -1,0 +1,29 @@
+<svg width="390" height="190" version="1.1" viewBox="0 0 103.19 50.271" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="linearGradient863" x1="4.0772" x2="97.707" y1="25.135" y2="25.135" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#c0a3e6" offset="0"/>
+   <stop stop-color="#8650cd" offset=".37"/>
+   <stop stop-color="#8742e1" offset=".67"/>
+   <stop stop-color="#430099" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g>
+  <path d="m0 50.271s2e-6 -50.271 51.594-50.271 51.594 50.271 51.594 50.271h-18.521s0-31.75-33.073-31.75c-33.073 0-33.073 31.75-33.073 31.75z" fill="url(#linearGradient863)"/>
+  <g fill="#fff">
+   <g style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal" aria-label="0">
+    <path d="m11.039 41.329q-0.55245 0-0.98425-0.27305-0.4318-0.27305-0.67945-0.7874-0.2413-0.5207-0.2413-1.2382t0.2413-1.2319q0.24765-0.5207 0.67945-0.79375 0.4318-0.27305 0.98425-0.27305t0.98425 0.27305 0.6731 0.79375q0.24765 0.51435 0.24765 1.2319t-0.24765 1.2382q-0.2413 0.51435-0.6731 0.7874t-0.98425 0.27305zm0-0.86995q0.4064 0 0.635-0.34925 0.23495-0.34925 0.23495-1.0795t-0.23495-1.0795q-0.2286-0.34925-0.635-0.34925-0.40005 0-0.635 0.34925-0.2286 0.34925-0.2286 1.0795t0.2286 1.0795q0.23495 0.34925 0.635 0.34925z" fill="#fff" stroke-width=".26458" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal"/>
+   </g>
+   <g stroke-width=".26458">
+    <g style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal" aria-label="3">
+     <path d="m93.248 38.502q0.5842 0.09525 0.89535 0.43815 0.31115 0.33655 0.31115 0.8382 0 0.38735-0.2032 0.71755-0.2032 0.32385-0.6223 0.5207-0.41275 0.19685-1.016 0.19685-0.4699 0-0.9271-0.12065-0.45085-0.127-0.76835-0.3556l0.40005-0.7874q0.254 0.1905 0.5842 0.29845 0.33655 0.1016 0.6858 0.1016 0.38735 0 0.6096-0.14605 0.22225-0.1524 0.22225-0.42545 0-0.5461-0.83185-0.5461h-0.4699v-0.67945l0.9144-1.035h-1.8923v-0.8255h3.1115v0.66675z"/>
+    </g>
+    <g style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal" aria-label="2">
+     <path d="m75.332 15.284v0.8382h-3.3592v-0.66675l1.7145-1.6192q0.27305-0.26035 0.3683-0.4445 0.09525-0.1905 0.09525-0.37465 0-0.2667-0.18415-0.4064-0.1778-0.14605-0.52705-0.14605-0.2921 0-0.52705 0.1143-0.23495 0.10795-0.3937 0.3302l-0.7493-0.4826q0.26035-0.38735 0.71755-0.60325 0.4572-0.22225 1.0478-0.22225 0.4953 0 0.8636 0.1651 0.37465 0.15875 0.57785 0.4572 0.20955 0.2921 0.20955 0.69215 0 0.36195-0.1524 0.67945t-0.59055 0.7239l-1.0224 0.9652z"/>
+    </g>
+    <g style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal" aria-label="1">
+     <path d="m30.483 11.941v4.445h-1.0287v-3.6195h-0.889v-0.8255z"/>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

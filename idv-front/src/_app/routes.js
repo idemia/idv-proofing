@@ -1,0 +1,18 @@
+export default {
+  root: '/',
+  redirect: '/redirect',
+  wait: '/wait',
+  placeId: '/place-id',
+  getId: '/get-id',
+  frontId: '/front-id',
+  backId: '/back-id',
+  camera: '/camera',
+  livenessCamera: '/liveness-camera',
+  preview: '/preview',
+  loading: '/loading',
+  error: '/error',
+  returnToDesktop: '/return',
+  incompatible: '/incompatible',
+  livenessInstructions: '/liveness-instructions',
+  summary: '/summary',
+};

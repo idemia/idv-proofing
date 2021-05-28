@@ -1,0 +1,26 @@
+.modal-enter{
+  transform: translateY(calc(var(--vh, 1vh) * 100));
+}
+.modal-enter-done {
+  transform: translateY(0);
+}
+
+.modal-enter-active {
+  transform: translateY(0);
+  will-change: transform;
+  transition: transform 0.4s linear;
+}
+
+.modal-exit {
+  transform: translateY(0);
+}
+
+.modal-exit-active{
+  transform: translateY(calc(var(--vh, 1vh) * 100));
+  will-change: transform;
+  transition: transform 0.4s linear;
+}
+
+.modal-exit-done {
+  transform: translateY(calc(var(--vh, 1vh) * 100));
+}

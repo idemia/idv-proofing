@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "@styles": ["src/_styles/*"],
+      "@routes": ["src/_app/routes"],
+      "@app": ["src/_app/*"],
+      "@stores/*": ["src/stores/*"],
+      "@assets/*": ["src/_assets/*"],
+      "@components": ["src/components/*"],
+      "@utils": ["src/_utils/*"],
+      "@constants": ["src/_constants/*"]
+    }
+  }
+}

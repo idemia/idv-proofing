@@ -1,0 +1,30 @@
+.dropdown-animation-enter{
+  opacity: 0;
+  transform: translateY(-50px);
+}
+.dropdown-animation-enter-done {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdown-animation-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s linear, transform 0.2s ease-in-out;
+}
+
+.dropdown-animation-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdown-animation-exit-active{
+  opacity: 0;
+  transform: translateY(-50px);
+  transition: opacity 0.3s linear, transform 0.2s 0.1s ease-in-out;
+}
+
+.dropdown-animation-exit-done {
+  opacity: 0;
+  transform: translateY(-50px);
+}

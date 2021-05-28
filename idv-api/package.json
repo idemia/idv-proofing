@@ -1,0 +1,84 @@
+{
+  "name": "idv-api",
+  "version": "1.0.0",
+  "author": "IDEMIA France S.A.",
+  "license": "Apache-2.0",
+  "private": true,
+  "engines": {
+    "node": ">=12",
+    "npm": ">=5.6",
+    "yarn": ">=1.3.2"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon --watch src src/bin/idv --inspect",
+    "build:stg": "rm -rf dist && cross-env NODE_ENV=staging babel src -d dist -s --copy-files",
+    "start:stg": "cross-env NODE_ENV=staging node dist/bin/idv.js",
+    "lint": "eslint --fix src"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.14.0",
+    "@koa/cors": "^3.1.0",
+    "awilix": "^4.3.4",
+    "awilix-koa": "^4.0.0",
+    "axios": "^0.21.1",
+    "axios-curlirize": "^1.3.7",
+    "babel-node": "^0.0.1-security",
+    "bristol": "0.4.0",
+    "form-data": "^4.0.0",
+    "fs": "^0.0.1-security",
+    "keyblade": "0.3.2",
+    "koa": "^2.13.1",
+    "koa-body": "^4.2.0",
+    "koa-compress": "^5.0.1",
+    "koa-helmet": "^6.1.0",
+    "koa-pug": "^4.0.4",
+    "koa-ratelimit": "^5.0.0",
+    "koa-respond": "^2.1.0",
+    "lodash": "4.17.21",
+    "moment": "^2.29.1",
+    "palin": "2.3.0",
+    "parse-multipart-data": "^1.0.0",
+    "socket.io": "^4.1.2",
+    "yenv": "3.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/node": "^7.14.2",
+    "@babel/plugin-proposal-decorators": "^7.14.2",
+    "@babel/plugin-transform-runtime": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.26.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "koa-sslify": "^5.0.0",
+    "nodemon": "^2.0.7",
+    "prettier": "2.3.0"
+  },
+  "resolutions": {
+    "lodash": "4.17.21",
+    "pug-code-gen": "2.0.3",
+    "pug": "3.0.2",
+    "urijs": "1.19.6",
+    "ini": "1.3.6"
+  },
+  "nodemonConfig": {
+    "execMap": {
+      "js": "babel-node"
+    }
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "plugins": [
+      "jest"
+    ],
+    "extends": [
+      "standard",
+      "plugin:jest/recommended"
+    ],
+    "env": {
+      "jest/globals": true
+    }
+  }
+}

@@ -1,0 +1,134 @@
+doctype html
+html(lang="en")
+  head
+    title="SSL Cert Verification"
+    meta(name="viewport" content="width=device-width,initial-scale=1")
+    script(type="text/javascript").
+      function close_window() {
+        if (confirm("This window will now be closed.")) {
+          var win = window.open("about:blank", "_self");
+          win.close();
+        }
+      }
+    style.
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .lock {
+        box-sizing: border-box;
+        padding: 0 24px;
+        height: 100px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12);
+        display: flex;
+        align-items: center;
+        z-index: 1000;
+        background-color: #fff;
+      }
+      .body {
+        padding: 50px 130px;
+      }
+      .h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 44px;
+        line-height: 63.998px;
+        font-weight: 600;
+        color: #101010;
+      }
+      .h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 24px;
+        line-height: 34.908px;
+        color: #4a4a4a;
+        white-space: pre-wrap;
+        color: rgb(74,74,74);
+      }
+      .buttonWrap {
+        padding: 20px 130px;
+        box-sizing: border-box;
+      }
+      .button {
+        background-color: rgb(67, 0, 153);
+        font-weight: 600;
+        font-size: 16px;
+        height: 44px;
+        color: rgb(255, 255, 255);
+        font-family: 'Montserrat', sans-serif;
+        border-radius: 22px;
+        cursor: pointer;
+        display: flex;
+        text-transform: uppercase;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+
+      }
+      @media screen and (max-width: 769px) {
+        .lock {
+          height: 50px;
+          padding: 0 12px;
+          width: 100%;
+        }
+        .logo {
+          height: 18px;
+        }
+        svg {
+          height: 18px;
+          width: auto;
+        }
+        .h1 {
+          font-size: 22px;
+          max-width: none;
+          line-height: 30px;
+        }
+        .h2 {
+          margin-top: 10px;
+          font-size: 16px;
+          line-height: 22px;
+        }
+        .body {
+          padding: 27px 16px;
+        }
+        .buttonWrap {
+          padding: 27px 16px;
+          position: fixed;
+          font-size: 22px;
+          width: 100%;
+          left:0;
+          bottom: 0;
+        }
+      }
+
+
+    link(rel="preconnect" href="https://fonts.gstatic.com")
+    link(href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet")
+  body
+    .lock
+      div.logo.
+        <svg xmlns="http://www.w3.org/2000/svg" width="140" height="53" viewBox="0 0 140 53">
+            <defs>
+                <filter id="8z3bcimsna" width="101.7%" height="124%" x="-.8%" y="-12%" filterUnits="objectBoundingBox">
+                    <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
+                    <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="2"/>
+                    <feColorMatrix in="shadowBlurOuter1" result="shadowMatrixOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"/>
+                    <feMerge>
+                        <feMergeNode in="shadowMatrixOuter1"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <g fill="none" fill-rule="evenodd">
+                <g fill="#430099" fill-rule="nonzero">
+                    <g filter="url(#8z3bcimsna)" transform="translate(-15 -23)">
+                        <g>
+                            <path d="M8.326 33.875V.8H.672v33.075h7.654zm22.87 0c10.82 0 18.238-6.52 18.238-16.538C49.434 7.32 42.016.8 31.195.8H16.17v33.075h15.025zm-.379-6.284h-6.993V7.084h6.993c6.568 0 10.868 3.922 10.868 10.253 0 6.332-4.3 10.254-10.868 10.254zm49.802 6.851l4.016-4.678-3.875-3.59c1.418-2.127 2.41-4.678 3.024-7.514l-5.906-1.842c-.378 1.937-.945 3.685-1.653 5.15l-6.048-5.623c4.488-2.457 6.473-4.961 6.473-8.363 0-4.678-3.78-7.607-9.498-7.607-6.236 0-10.3 3.307-10.3 8.127 0 2.362.992 4.489 3.402 6.993-5.056 2.835-7.276 5.717-7.276 9.875 0 5.292 5.339 9.072 12.615 9.072 4.253 0 8.033-1.323 11.057-3.686l3.969 3.686zm-14.506-21.83c-2.032-1.984-2.551-2.929-2.551-4.205 0-1.748 1.323-3.024 3.59-3.024 2.127 0 3.26 1.134 3.26 2.74 0 1.513-1.039 2.741-4.299 4.49zm0 16.066c-3.638 0-5.906-1.701-5.906-4.111 0-2.032 1.087-3.544 4.11-5.292l7.986 7.465c-1.796 1.276-3.922 1.938-6.19 1.938zm40.966 5.197L121.396.8h-7.608l-10.206 23.625L93.518.8h-8.269l14.27 33.075h7.56z" transform="translate(24 32)"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </svg>
+    .body
+      .h1 Thank you
+      .h2 You are now all good to go. You'll have to complete a similar procedure on your mobile device but the system will guide you through it.
+      .buttonWrap
+        a.button(onClick="javascript:close_window()") Close
