@@ -10,6 +10,11 @@ import documentIndicators from '@constants/documentIndicators.json';
 const MAX_ATTEMPTS = 360;
 const RETRY_INTERVAL = 10000;
 
+function humanize(text) {
+  const string = text.replace(/_/g, ' ').toLowerCase();
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export class SummaryStore {
   documentAuthenticationDetails = [];
 
@@ -146,24 +151,24 @@ export class SummaryStore {
     const positive = positiveIndicators.map(indicator => {
       const indicatorStriped = indicator.toString().replace('_OK', '');
       return {
-        text: indicatorStriped.humanize().s,
-        description: documentIndicators[indicatorStriped.s],
+        text: humanize(indicatorStriped),
+        description: documentIndicators[indicatorStriped],
         status: 'passed',
       };
     });
     const unverified = unverifiedIndicators.map(indicator => {
       const indicatorStriped = indicator.toString().replace('_UNVERIFIED', '');
       return {
-        text: indicatorStriped.humanize().s,
-        description: documentIndicators[indicatorStriped.s],
+        text: humanize(indicatorStriped),
+        description: documentIndicators[indicatorStriped],
         status: 'untested',
       };
     });
     const warnings = warningIndicators.map(indicator => {
       const indicatorStriped = indicator.toString().replace('_FAILED', '');
       return {
-        text: indicatorStriped.humanize().s,
-        description: documentIndicators[indicatorStriped.s],
+        text: humanize(indicatorStriped),
+        description: documentIndicators[indicatorStriped],
         status: 'failed',
       };
     });
