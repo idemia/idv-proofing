@@ -16,6 +16,7 @@ import LivenessAnimation2 from '@assets/animations/liveness-2.json';
 import LivenessAnimation3 from '@assets/animations/liveness-3.json';
 import NetworkChecker from '@components/NetworkChecker';
 import { LIVENESS_TYPES } from '@constants';
+import { toast } from 'react-toastify';
 
 const STEPS = [
   {
@@ -54,7 +55,17 @@ const LivenessInstructions = ({
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    checkNetworkConnection('bioserver');
+    (async () => {
+      try {
+        await checkNetworkConnection('bioserver');
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error('Unknown error occurred during network check');
+        }
+      }
+    })()
   }, []);
 
   useEffect(() => {

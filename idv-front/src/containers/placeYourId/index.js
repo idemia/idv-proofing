@@ -5,6 +5,7 @@ import PlaceIdAnimation from '@assets/animations/doc-place-front-doc.json';
 import NetworkChecker from '@components/NetworkChecker';
 import routes from '@routes';
 import Wizard from '@components/Wizard';
+import { toast } from 'react-toastify';
 
 const header = { type: HEADER_TYPES.LOCK };
 const button = {
@@ -24,7 +25,17 @@ const PlaceId = ({
   documentStore: { docType, isInitialized },
 }) => {
   useEffect(() => {
-    checkNetworkConnection();
+    (async () => {
+      try {
+        await checkNetworkConnection();
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error('Unknown error occurred during network check');
+        }
+      }
+    })()
   }, []);
 
   useEffect(() => {
