@@ -151,7 +151,7 @@ export class ApplicationStore {
             });
             resolve(networkConnectionResult);
           },
-          errorFn: () => {
+          errorFn: (error) => {
             runInAction(() => {
               this.checkingNetworkConnection = false;
               this.networkChecked = true;
@@ -159,7 +159,7 @@ export class ApplicationStore {
               this.networkCheckError = true;
               this.networkConnectionHasBeenChecked = true;
             });
-            reject(new Error('Network check error'));
+            reject(error);
           },
         });
       } else {
