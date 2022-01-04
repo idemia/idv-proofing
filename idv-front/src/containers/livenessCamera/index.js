@@ -34,7 +34,6 @@ const Camera = ({
     challengeInProgress,
     showFaceOutline,
   },
-  livenessStore: { fetchingChallengeResults },
 }) => {
   const history = useHistory();
   const intl = useIntl();
@@ -84,7 +83,7 @@ const Camera = ({
           </CSSTransition>
 
           <CSSTransition
-            in={challengePending || fetchingChallengeResults}
+            in={challengePending}
             timeout={300}
             classNames="fade"
             unmountOnExit

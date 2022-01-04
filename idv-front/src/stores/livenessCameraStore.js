@@ -5,6 +5,7 @@ import {
   ARBITARY_CAMERA_INITIALIZATION_DELAY,
   TRACKING_POSITION_INFO,
 } from '@constants';
+import documentStore from './documentStore';
 
 const CAMERA_FRAME_MESSAGE_PREFIX = 'camera.frame.liveness';
 
@@ -51,7 +52,7 @@ export class LivenessCameraStore {
     makeAutoObservable(this);
   }
 
-  displayInstructionsToUser = trackingInfo => {
+  displayInstructionsToUser = (trackingInfo) => {
     // Display messages to user during capture (eg: move closer, center your face ...)
     if (trackingInfo) {
       const { livenessHigh: livenessHighData } = trackingInfo;
@@ -78,7 +79,7 @@ export class LivenessCameraStore {
   };
 
   // handle showing information for initial user face capture for passive liveness
-  handlePassiveLivenessMessages = trackingInfo => {
+  handlePassiveLivenessMessages = (trackingInfo) => {
     if (
       !this.challengeInProgress &&
       trackingInfo.positionInfo !==
@@ -92,7 +93,7 @@ export class LivenessCameraStore {
   };
 
   // handle showing information for when user don't know what to do in high liveness
-  handleHighLivenessMessages = livenessHighData => {
+  handleHighLivenessMessages = (livenessHighData) => {
     if (livenessHighData.stillFace) {
       this.showTemporaryMessage(`${CAMERA_FRAME_MESSAGE_PREFIX}.still_face`);
       this.phoneNotVertical = false;
@@ -103,7 +104,7 @@ export class LivenessCameraStore {
   };
 
   // temporary overlay show with message
-  showTemporaryMessage = message => {
+  showTemporaryMessage = (message) => {
     if (this.temporaryMessageTimeout)
       clearTimeout(this.temporaryMessageTimeout);
     this.cameraFrameMessage = message;
@@ -120,7 +121,7 @@ export class LivenessCameraStore {
       const videoStream = await BioserverVideo.getMediaStream({
         video: { width: 1280, height: 720 },
         videoId: 'camera-video-container',
-      }).catch(e => {
+      }).catch((e) => {
         let msg = this.intl.formatMessage({
           id: 'error.camera.video_stream_failed',
         });
@@ -157,7 +158,7 @@ export class LivenessCameraStore {
   initCamera = async (videoOutput, intl) => {
     try {
       await livenessStore.restoreLivenessSession();
-      const { sessionId, identityId } = livenessStore;
+      const { sessionId } = livenessStore;
 
       await runInAction(() => {
         this.isLoading = true;
@@ -174,8 +175,8 @@ export class LivenessCameraStore {
 
       const faceCaptureOptions = {
         bioSessionId: sessionId,
-        identityId,
-        showChallengeInstruction: async challengeInstruction => {
+        identityId: documentStore.identityId,
+        showChallengeInstruction: async (challengeInstruction) => {
           // eslint-disable-next-line no-console
           console.log('@@@ showChallengeInstruction', {
             challengeInstruction,
@@ -215,7 +216,7 @@ export class LivenessCameraStore {
           );
           routerStore.push(routes.loading);
         },
-        trackingFn: trackingInfo => {
+        trackingFn: (trackingInfo) => {
           if (!this.challengePending) {
             this.displayInstructionsToUser(trackingInfo);
 

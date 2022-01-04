@@ -35,7 +35,7 @@ const PlaceId = ({
           toast.error('Unknown error occurred during network check');
         }
       }
-    })()
+    })();
   }, []);
 
   useEffect(() => {

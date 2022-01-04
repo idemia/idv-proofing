@@ -1,4 +1,4 @@
-import { before, GET, POST, route } from 'awilix-koa';
+import { before, POST, route } from 'awilix-koa';
 import { validate, validateEnum, validateRequired } from '../../lib/validator';
 import routes from '../routes';
 
@@ -12,55 +12,27 @@ const DOC_TYPES = [
 
 @route(routes.documents.root)
 export default class DocumentsController {
-  constructor({ docServerApiService }) {
-    this.docServerApiService = docServerApiService;
+  constructor({ gipsApiService }) {
+    this.gipsApiService = gipsApiService;
   }
 
   @POST()
   @route(routes.documents.session)
   @before(
     validate([
-      validateRequired(['countryCode', 'docType', 'docSides']),
-      validateEnum('docType', DOC_TYPES),
+      validateRequired(['issuingCountry', 'idDocumentType']),
+      validateEnum('idDocumentType', DOC_TYPES),
     ]),
   )
   async createSession(ctx) {
-    const { countryCode, docType, docSides } = ctx.request.body;
-    const result = await this.docServerApiService.createDocumentSession({
-      countryCode,
-      docType,
-      docSides,
-    });
-    ctx.respondWith(result);
-  }
+    const {
+      body: { issuingCountry, idDocumentType, identityId },
+    } = ctx.request;
 
-  @GET()
-  @route(routes.documents.sessionDetails)
-  async getSession(ctx) {
-    const { id } = ctx.params;
-    const result = await this.docServerApiService.getDocumentSession({
-      sessionId: id,
-    });
-    ctx.respondWith(result);
-  }
-
-  @GET()
-  @route(routes.documents.sessionCaptureResult)
-  async getDocCaptureResult(ctx) {
-    const { sessionId, documentSideId } = ctx.params;
-    const result = await this.docServerApiService.getCaptureResult({
-      sessionId,
-      documentSideId,
-    });
-    ctx.respondWith(result);
-  }
-
-  @GET()
-  @route(routes.documents.sessionCaptures)
-  async getDocCaptureResult(ctx) {
-    const { sessionId } = ctx.params;
-    const result = await this.docServerApiService.getCaptureResult({
-      sessionId,
+    const result = await this.gipsApiService.createDocumentSession({
+      issuingCountry,
+      idDocumentType,
+      identityId,
     });
     ctx.respondWith(result);
   }

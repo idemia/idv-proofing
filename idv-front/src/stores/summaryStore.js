@@ -28,8 +28,6 @@ export class SummaryStore {
 
   idDocument = {};
 
-  identityId = null;
-
   identityInformationStatus = null;
 
   isLoading = false;
@@ -59,7 +57,7 @@ export class SummaryStore {
       this.isLoading = true;
     });
     try {
-      const { identityId } = this;
+      const { identityId } = documentStore;
 
       const {
         data: { data: identityStatusResponse },
@@ -74,7 +72,7 @@ export class SummaryStore {
         }
       } else if (
         identityStatusResponse.singleStatuses.filter(
-          singleStatus => singleStatus.status === 'ADJUDICATION',
+          (singleStatus) => singleStatus.status === 'ADJUDICATION',
         ).length
       ) {
         runInAction(() => {
@@ -102,6 +100,8 @@ export class SummaryStore {
         this.processIdentity(identity);
       }
     } catch (error) {
+      console.error('getIdentityStatus()', error);
+
       runInAction(() => {
         this.error = {
           msg: 'Something went wrong',
@@ -114,7 +114,7 @@ export class SummaryStore {
     }
   };
 
-  processIdentity = identity => {
+  processIdentity = (identity) => {
     this.overallScore = get(identity, 'globalStatus.levelOfAssurance', null);
 
     this.idDocument = last(get(identity, 'idDocuments', {}));
@@ -122,20 +122,22 @@ export class SummaryStore {
 
     this.selfieImageURL = `${
       process.env.REACT_APP_API_URL
-    }${APIRoutes.getCapturedPortrait(this.identityId)}`;
+    }${APIRoutes.getCapturedPortrait(documentStore.identityId)}`;
 
     this.documentFrontImage = `${
       process.env.REACT_APP_API_URL
-    }${APIRoutes.getDocumentImage(this.identityId, this.documentId)}`;
+    }${APIRoutes.getDocumentImage(documentStore.identityId, this.documentId)}`;
 
-    this.twoSidesDocument = documentStore.documentHasTwoSides(
-      this.idDocument.type,
-    );
+    this.twoSidesDocument = documentStore.documentHasTwoSides();
 
     if (this.twoSidesDocument) {
       this.documentBackImage = `${
         process.env.REACT_APP_API_URL
-      }${APIRoutes.getDocumentImage(this.identityId, this.documentId, 'back')}`;
+      }${APIRoutes.getDocumentImage(
+        documentStore.identityId,
+        this.documentId,
+        'back',
+      )}`;
     }
 
     // map evidence status for Document Authentication
@@ -148,7 +150,7 @@ export class SummaryStore {
     );
     const warningIndicators = get(evidenceStatus, 'warningIndicators', []);
 
-    const positive = positiveIndicators.map(indicator => {
+    const positive = positiveIndicators.map((indicator) => {
       const indicatorStriped = indicator.toString().replace('_OK', '');
       return {
         text: humanize(indicatorStriped),
@@ -156,7 +158,7 @@ export class SummaryStore {
         status: 'passed',
       };
     });
-    const unverified = unverifiedIndicators.map(indicator => {
+    const unverified = unverifiedIndicators.map((indicator) => {
       const indicatorStriped = indicator.toString().replace('_UNVERIFIED', '');
       return {
         text: humanize(indicatorStriped),
@@ -164,7 +166,7 @@ export class SummaryStore {
         status: 'untested',
       };
     });
-    const warnings = warningIndicators.map(indicator => {
+    const warnings = warningIndicators.map((indicator) => {
       const indicatorStriped = indicator.toString().replace('_FAILED', '');
       return {
         text: humanize(indicatorStriped),
@@ -181,7 +183,7 @@ export class SummaryStore {
 
     this.proofDownloadURL = `${
       process.env.REACT_APP_API_URL
-    }${APIRoutes.getProof(this.identityId)}`;
+    }${APIRoutes.getProof(documentStore.identityId)}`;
 
     this.identityInformationStatus =
       !!this.overallScore && this.overallScore !== 'LOA0'
@@ -193,7 +195,7 @@ export class SummaryStore {
     try {
       this.restoreIds();
 
-      if (this.identityId && this.sessionId) {
+      if (documentStore.identityId && this.sessionId) {
         await this.getIdentityStatus();
       } else {
         throw new Error('missing parameters');
@@ -210,14 +212,8 @@ export class SummaryStore {
     }
   };
 
-  setIds = (identityId, sessionId) => {
-    this.identityId = identityId;
-    this.sessionId = sessionId;
-  };
-
   restoreIds = () => {
-    if (!this.identityId || !this.sessionId) {
-      this.identityId = getItem(KEYS.IDENTITY_ID);
+    if (!documentStore.identityId || !this.sessionId) {
       this.sessionId = getItem(KEYS.SESSION_ID);
       applicationStore.setWizardStepsAndRoutingConfiguration();
     }
@@ -226,7 +222,6 @@ export class SummaryStore {
   reset = () => {
     this.isLoading = false;
     this.documentId = null;
-    this.identityId = null;
     this.sessionId = null;
     this.summary = {};
     this.error = null;

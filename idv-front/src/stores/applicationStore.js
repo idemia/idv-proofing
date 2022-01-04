@@ -4,12 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import qs from 'query-string';
 import { getItem, setItem, KEYS, clear } from '@utils/storage';
-import {
-  routerStore,
-  documentStore,
-  livenessStore,
-  summaryStore,
-} from '@stores';
+import { routerStore, documentStore, livenessStore } from '@stores';
 import verifications from '@constants/verifications';
 import routes from '@routes';
 
@@ -24,11 +19,6 @@ const WS_OPTIONS = {
   reconnectionDelay: 2000,
 };
 
-const ROUTES_CONFIG = {
-  BACK: routes.backId,
-  LIVENESS: routes.livenessInstructions,
-  SUMMARY: routes.summary,
-};
 export class ApplicationStore {
   compatibilityChecked = false;
 
@@ -75,7 +65,7 @@ export class ApplicationStore {
       // change emoji icons after all flags have been loaded
       setTimeout(() => {
         [...document.querySelectorAll('.emoji-flag')].forEach(
-          n => twemoji.parse(n), // eslint-disable-line  no-undef
+          (n) => twemoji.parse(n), // eslint-disable-line  no-undef
         );
       }, 0);
     } catch (error) {
@@ -95,7 +85,7 @@ export class ApplicationStore {
   checkCompatibility = () =>
     new Promise((resolve, reject) => {
       if (DocserverEnvironment) {
-        DocserverEnvironment.detection(true, response => {
+        DocserverEnvironment.detection(true, (response) => {
           resolve(response);
           runInAction(() => {
             this.compatibilityChecked = true;
@@ -137,11 +127,12 @@ export class ApplicationStore {
           downloadURL: `${speedCheckPath}/network-speed`,
           uploadURL: `${speedCheckPath}/network-speed`,
           latencyURL: `${speedCheckPath}/network-latency`,
-          onNetworkCheckUpdate: networkConnectionResult => {
+          onNetworkCheckUpdate: (networkConnectionResult) => {
             runInAction(() => {
               this.checkingNetworkConnection = false;
               this.networkChecked = true;
-              this.weakNetworkConnection = !networkConnectionResult.goodConnectivity;
+              this.weakNetworkConnection =
+                !networkConnectionResult.goodConnectivity;
               this.networkConnectionDetails = {
                 ...networkConnectionResult,
                 checkType: type,
@@ -192,10 +183,10 @@ export class ApplicationStore {
     return true;
   };
 
-  isSupportedDevice = envDetected =>
+  isSupportedDevice = (envDetected) =>
     envDetected.browser.isSupported && envDetected.os.isSupported;
 
-  selectMethod = async method => {
+  selectMethod = async (method) => {
     runInAction(() => {
       this.isLoading = true;
       this.selectedMethod = method;
@@ -277,7 +268,7 @@ export class ApplicationStore {
           if (ssid && methodId) {
             clear();
             const selectedMethod = verifications.find(
-              v => v.id === parseInt(methodId, 10),
+              (v) => v.id === parseInt(methodId, 10),
             );
             // eslint-disable-next-line no-console
             console.log('@@@ initMobileWizard', {
@@ -297,8 +288,10 @@ export class ApplicationStore {
               this.returnToDesktop = true;
               this.selectedMethod = selectedMethod;
             });
+
+            await documentStore.restoreSessionData(ssid);
+
             routerStore.replace(routes.placeId);
-            await documentStore.getSessionData(ssid);
           } else {
             await documentStore.initSession();
           }
@@ -358,7 +351,7 @@ export class ApplicationStore {
       const { sessionId } = documentStore;
       await livenessStore.restoreLivenessSession();
       const { identityId } = livenessStore;
-      this.wsConnection.emit('showDesktopSummary', {
+     this.wsConnection.emit('showDesktopSummary', {
         sessionId,
         identityId,
       });
@@ -388,11 +381,7 @@ export class ApplicationStore {
       this.wizardStepCount = wizardProgress.wizardStepCount;
       this.currentWizardStep = wizardProgress.currentWizardStep;
     } else {
-      this.sides = [
-        ...this.selectedMethod.docSides.map(({ name }) => name),
-        'LIVENESS',
-        'SUMMARY',
-      ];
+      this.sides = ['FRONT', 'LIVENESS', 'SUMMARY'];
       this.wizardStepCount = this.sides.length;
       this.currentWizardStep = 0;
 
@@ -414,10 +403,9 @@ export class ApplicationStore {
   getNextRoute = () => {
     this.currentWizardStep += 1;
     this.saveWizardSettings();
-    return ROUTES_CONFIG[this.sides[this.currentWizardStep]];
   };
 
-  setCurrentWizardStep = stepNo => {
+  setCurrentWizardStep = (stepNo) => {
     this.currentWizardStep = stepNo;
   };
 
@@ -430,14 +418,10 @@ export class ApplicationStore {
           this.reconnectWS();
         }
 
-        this.wsConnection.on('mobileWizardFinished', async data => {
+        this.wsConnection.on('mobileWizardFinished', async (data) => {
           if (data.sessionId === getItem(KEYS.SESSION_ID)) {
-            await documentStore.getSessionData(data.sessionId);
-            runInAction(() => {
-              livenessStore.identityId = data.identityId;
-            });
+            await documentStore.restoreSessionData(data.sessionId);
             setItem(KEYS.IDENTITY_ID, data.identityId);
-            summaryStore.setIds(data.identityId, data.sessionId);
             routerStore.push(routes.summary);
           }
         });

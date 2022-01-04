@@ -9,3 +9,4 @@ src/public/docs
 .DS_Store
 yours.xero.key.pem
 /ssl/*.pem
+env.yaml

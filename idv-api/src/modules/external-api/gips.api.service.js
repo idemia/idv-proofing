@@ -51,6 +51,17 @@ export default class GipsApiService {
   }
 
   @handleExternalApiResponse
+  async createDocumentSession({ identityId, ...payload }) {
+    const url = `/identities/${identityId}/id-documents/live-capture-session`;
+    this._logRequestInfo({
+      url,
+      method: 'POST',
+      message: 'Starts new document capture session.',
+    });
+    return this.client.post(url, payload);
+  }
+
+  @handleExternalApiResponse
   async createLiveCaptureSession({ identityId, payload }) {
     const url = `/identities/${identityId}/attributes/portrait/live-capture-session`;
     this._logRequestInfo({

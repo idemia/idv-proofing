@@ -1,10 +1,11 @@
 export default {
+  session: {
+    root: '/session',
+    cache: '/cache',
+  },
   documents: {
     root: '/document',
     session: '/session',
-    sessionDetails: '/session/:id',
-    sessionCaptureResult: '/session/:sessionId/captures/:documentSideId',
-    sessionCaptures: '/session/:sessionId/captures',
   },
   identityProofing: {
     root: '/identity-proofing',
