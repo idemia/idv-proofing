@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { useIntl } from 'react-intl';
 import { HEADER_TYPES } from '@components/Header/style';
-import PendingAuthorization from '@components/PendingAuthorization';
 import routes from '@routes';
 import Layout from '@components/Layout';
 import Loader, { SIZE } from '@components/Loader';
@@ -22,9 +21,8 @@ const Camera = ({
     initCamera,
     resetCameraStore,
     renderBorders,
-    pending,
   },
-  documentStore: { docFormat, backToFirstSide },
+  documentStore: { docFormat, back },
 }) => {
   const history = useHistory();
   const intl = useIntl();
@@ -39,8 +37,8 @@ const Camera = ({
       }
     };
 
-    if (!pending) init();
-  }, [pending]);
+    init();
+  }, []);
 
   useEffect(
     () => () => {
@@ -55,28 +53,17 @@ const Camera = ({
 
   return (
     <Layout
-      type={pending ? HEADER_TYPES.BUTTON : HEADER_TYPES.DB_BUTTON_CAMERA}
-      buttonTwoCallback={backToFirstSide}
+      type={HEADER_TYPES.DB_BUTTON_CAMERA}
+      buttonTwoCallback={back}
       buttonCallback={() => history.push(routes.root)}
       hideHeaderOnLandscape
     >
-      {pending ? (
-        <PendingAuthorization />
-      ) : (
-        <>
-          {!initialized || (isLoading && <Loader size={SIZE.LARGE} cover />)}
+      {!initialized || (isLoading && <Loader size={SIZE.LARGE} cover />)}
 
-          {renderBorders && docFormat && (
-            <CameraBorders format={docFormat} message={cameraFrameMessage} />
-          )}
-          <Styled.CameraContainer
-            ref={videoOutput}
-            muted
-            playsInline
-            autoPlay
-          />
-        </>
+      {renderBorders && docFormat && (
+        <CameraBorders format={docFormat} message={cameraFrameMessage} />
       )}
+      <Styled.CameraContainer ref={videoOutput} muted playsInline autoPlay />
     </Layout>
   );
 };

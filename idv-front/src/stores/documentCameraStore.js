@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { makeAutoObservable, runInAction } from 'mobx';
 import { documentStore, routerStore } from '@stores';
 import routes from '@routes';
@@ -28,8 +30,6 @@ export class DocumentCameraStore {
 
   renderBorders = true;
 
-  pending = false;
-
   cameraFrameMessage = '';
 
   availableCameraDevices = {};
@@ -50,7 +50,7 @@ export class DocumentCameraStore {
     makeAutoObservable(this);
   }
 
-  displayInstructionsToUser = ({ position, corners, pending }) => {
+  displayInstructionsToUser = ({ position, corners }) => {
     // Event list: badFraming, glare, blur, tooClose, tooFar, holdStraight, lowlight
     if (position) {
       runInAction(() => {
@@ -60,7 +60,7 @@ export class DocumentCameraStore {
         } else if (position.holdStraight) {
           this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.hold_straight`;
         } else if (position.badFraming) {
-          this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.align.${documentStore.docType}.${documentStore.docSide?.side?.name}`;
+          this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.align.${documentStore.docType}`;
         } else if (position.lowlight) {
           this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.low_light`;
         } else if (position.reflection) {
@@ -72,7 +72,7 @@ export class DocumentCameraStore {
         } else if (position.blur) {
           this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.blur`;
         } else {
-          this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.align.${documentStore.docType}.${documentStore.docSide?.side?.name}`;
+          this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.align.${documentStore.docType}`;
         }
       });
     }
@@ -84,16 +84,12 @@ export class DocumentCameraStore {
           this.videoOutput.offsetWidth / this.videoOutput.videoWidth;
         const coefH =
           this.videoOutput.offsetHeight / this.videoOutput.videoHeight;
-        const points = `${x0 * coefW}, ${y0 * coefH} ${x1 * coefW}, ${y1 *
-          coefH} ${x2 * coefW}, ${y2 * coefH} ${x3 * coefW}, ${y3 * coefH}`;
+        const points = `${x0 * coefW}, ${y0 * coefH} ${x1 * coefW}, ${
+          y1 * coefH
+        } ${x2 * coefW}, ${y2 * coefH} ${x3 * coefW}, ${y3 * coefH}`;
 
         this.documentFrame.setAttribute('points', points);
       }
-    }
-    if (pending) {
-      runInAction(() => {
-        this.pending = true;
-      });
     }
   };
 
@@ -101,7 +97,7 @@ export class DocumentCameraStore {
     try {
       const videoStream = await DocserverVideo.getDeviceStream({
         video: { deviceId },
-        errorFn: err => {
+        errorFn: (err) => {
           console.log('Failed to get User Media Stream', err); // eslint-disable-line
           runInAction(() => {
             this.error = {
@@ -111,7 +107,7 @@ export class DocumentCameraStore {
             };
           });
         },
-      }).catch(e => {
+      }).catch((e) => {
         let msg = this.intl.formatMessage({ id: 'error.camera.message' });
         let extendedMsg;
         if (e.name && e.name.indexOf('NotAllowed') > -1) {
@@ -147,12 +143,12 @@ export class DocumentCameraStore {
         });
       }
     } catch (error) {
-      console.warn(error); // eslint-disable-line
+      console.error(error);
     }
   };
 
   initCamera = async (videoOutput, intl) => {
-    await runInAction(() => {
+    runInAction(() => {
       this.isLoading = true;
       this.documentFrame = document.getElementById('doc-frame');
       this.videoOutput = videoOutput;
@@ -169,34 +165,41 @@ export class DocumentCameraStore {
 
       // initialize the doc capture client with callbacks
       const docCaptureOptions = {
-        docserverVideoUrl: process.env.REACT_APP_DOCSERVER_URL,
-        onDocCaptured: async doc => {
+        fullDocCapture: true,
+        sessionId: documentStore.sessionId,
+        onChangeDocumentSide: () => {
           runInAction(() => {
-            this.captureInProgress = false;
+            this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.changeDocumentSide`;
           });
 
+          setTimeout(() => {
+            runInAction(() => {
+              this.cameraFrameMessage = '';
+            });
+          }, 1000 * 5);
+        },
+        docserverVideoUrl: process.env.REACT_APP_DOCSERVER_URL,
+        onDocCaptured: async (doc) => {
           if (doc) {
-            routerStore.push(routes.preview);
-          }
-
-          if (this.client) {
-            this.client.disconnect();
+            runInAction(() => {
+              this.captureInProgress = false;
+              this.doc = doc;
+              routerStore.push(routes.preview);
+              this.client.finishSession();
+            });
           }
         },
-        trackingFn: trackingInfo => {
+        trackingFn: (trackingInfo) => {
           this.displayInstructionsToUser(trackingInfo);
         },
-        errorFn: error => {
-          console.warn('doc capture error', error); // eslint-disable-line
+        errorFn: (error) => {
+          console.error('doc capture error', error); // eslint-disable-line
 
           runInAction(() => {
             this.error = {
               msg: this.intl.formatMessage({ id: 'camera.error.undefined' }),
             };
           });
-          if (this.client) {
-            this.client.disconnect();
-          }
         },
       };
 
@@ -206,12 +209,11 @@ export class DocumentCameraStore {
       );
 
       runInAction(() => {
-        this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.align.${documentStore.docType}.${documentStore.docSide?.side?.name}`;
+        this.cameraFrameMessage = `${CAMERA_FRAME_MESSAGE_PREFIX}.align.${documentStore.docType}`;
       });
       initTimeout = setTimeout(() => {
         client.start({
           stream: this.videoStream,
-          sessionId: documentStore.sessionId,
           isRetry: this.isRetry,
         });
         runInAction(() => {
@@ -223,7 +225,8 @@ export class DocumentCameraStore {
         this.client = client;
       });
     } catch (error) {
-      console.warn(error); // eslint-disable-line
+      console.error(error);
+
       runInAction(() => {
         this.captureInProgress = false;
       });
@@ -242,15 +245,14 @@ export class DocumentCameraStore {
         this.client.disconnect();
       }
       this.error = null;
-      this.pending = false;
       this.videoStream = null;
       this.isRetry = false;
     } catch (error) {
-      console.warn(error); // eslint-disable-line
+      console.error(error);
     }
   };
 
-  setCameraLayout = docType => {
+  setCameraLayout = (docType) => {
     this.renderBorders = DOC_TYPES_RENDER_BORDERS[docType];
   };
 

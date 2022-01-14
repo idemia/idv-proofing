@@ -6,8 +6,8 @@ const API = axios.create({
 });
 
 API.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (error.message === 'Network Error') {
       toast.error('Ups. Looks like no connection with API');
     }
@@ -16,20 +16,19 @@ API.interceptors.response.use(
 );
 
 const APIRoutes = {
+  sessionCache: (sessionId) => `/session/cache?sessionId=${sessionId}`,
   initDocumentSession: '/document/session',
-  getDocumentSession: sessionId => `/document/session/${sessionId}`,
-  getCapturedResults: sessionId => `/document/session/${sessionId}/captures`,
   createLivenessIdentity: '/identity-proofing/identity',
   sendConsent: '/identity-proofing/consents',
   createLivenessSession: '/identity-proofing/session',
   verifyIdDocument: '/identity-proofing/capture-id-document',
-  checkIdentityStatus: identityId =>
+  checkIdentityStatus: (identityId) =>
     `/identity-proofing/check-identity-status?identityId=${identityId}`,
-  getIdentity: identityId =>
+  getIdentity: (identityId) =>
     `/identity-proofing/get-identity?identityId=${identityId}`,
-  getCapturedPortrait: identityId =>
+  getCapturedPortrait: (identityId) =>
     `/identity-proofing/get-captured-portrait?identityId=${identityId}`,
-  getProof: identityId =>
+  getProof: (identityId) =>
     `/identity-proofing/get-proof?identityId=${identityId}`,
   getDocumentImage: (identityId, documentId, side = 'front') =>
     `/identity-proofing/get-document-image?identityId=${identityId}&documentId=${documentId}&side=${side}`,

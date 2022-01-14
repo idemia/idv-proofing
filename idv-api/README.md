@@ -1,8 +1,8 @@
-# DOCSERVER & GIPS API MIDDLEWARE
+# GIPS API MIDDLEWARE
 
 ### Preface
 
-This project serves as an example showing how to integrate IDEMIA's GIPS and DOCSERVER APIs into your backend.
+This project serves as an example showing how to integrate IDEMIA's GIPS into your backend.
 
 ### Prerequisites
 
@@ -138,8 +138,6 @@ environment. The example above overrides the value of `PROP_Y` for `NODE_ENV=dev
 | ---- | ------------- | ------- |
 | PORT | 5001 | the HTTPs port the app is listening on |
 | LOG_LEVEL | debug/info/warn | the log level used |
-| API_DOC_SERVER_URL | https://ipv-api-v2-eu-service.dsa.idemia.io/doc-server/v1 | the url of IDEMIA's doc server instance used | 
-| API_DOC_SERVER_KEY | xxxxxxxxxxxxxxxxxxxxxxxxxxx | your doc server API key - you **MUST** set it to use this demo |
 |API_GIPS_URL |  https://ipv-api-v2-eu-service.dsa.idemia.io/gips/v1 | the url of IDEMIA's GIPS server instance used |
 | API_GIPS_KEY | xxxxxxxxxxxxxxxxxxxxxxxxxxx | your GIPS server API key - you **MUST** set it to use this demo |
 | ENABLE_REQUESTS_LOGGER | false | indicates whether incoming requests should be logged to the console. Setting this to `true` affects performance |
@@ -196,8 +194,6 @@ public trusted authority and use a domain name you own.
    times. As long as you see a "✨ Done in XX.YYs." message, you should be good to go.
 3. Open `env.yaml` and make sure the configuration variables are correct and all API keys/urls are correctly set. You'll
    find the right values for them in IDEMIA's Developer Portal:
-    - **API_DOC_SERVER_URL**: docserver api URL (eg. https://ipv-api-v2-eu-service.dsa.idemia.io/doc-server/v1)
-    - **API_DOC_SERVER_KEY**: docserver api key (<YOUR_API_KEY>)
     - **API_GIPS_URL**: GIPS api URL (eg. https://ipv-api-v2-eu-service.dsa.idemia.io/gips/v1)
     - **API_GIPS_KEY**: GIPS api key (<YOUR_API_KEY>)
 
