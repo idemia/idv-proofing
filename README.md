@@ -7,3 +7,8 @@ and grant access to their services. For the installation purposes please follow 
 
 * [idv-api](idv-api/README.md)
 * [idv-front](idv-front/README.md)
+
+### Update: Docserver flow
+
+On 2022-01-13, the implementation using DocServer has been replaced with new, GIPS-only flow. Please consult `legacy` branch in case you still want to reference
+an older version of this demo.
