@@ -1,0 +1,94 @@
+@startuml
+actor "Browser" as ua
+participant "Your custom backend" as api
+participant "WebDoc" as doc
+participant "WebBio" as bio
+participant "GIPS" as gips
+
+== Initialization ==
+
+ua -> doc : Request document capture JavaScript SDK files
+doc --> ua
+ua -> bio : Request liveness (portrait) capture JavaScript SDK files
+bio --> ua
+ua -> doc : Check network conditions for Document Scan
+doc --> ua
+ua -> bio : Check network conditions for Liveness (portrait)
+bio --> ua
+
+ua -> api : Create GIPS Identity
+note right of ua: POST {API_URL}/identity-proofing/identity
+
+api -> gips : Create GIPS Identity
+note right of api: POST {GIPS_URL}/identities/
+
+gips --> api : Receive GIPS Identity
+api --> ua : Receive GIPS Identity
+
+ua -> api : Create document session
+note right of ua: POST {GIPS_URL}/document/session
+
+api -> gips : Create document session
+note right of api: POST {GIPS_URL}/identities/${identityId}/id-documents/live-capture-session
+
+gips --> api : Receive GIPS sessionId
+
+api --> ua : Pass sessionId and identityId back to User Agent
+
+== Session is now ready ==
+
+ua -> api: Send portrait consent
+
+note right of ua: POST {API_URL}/identity-proofing/consents
+api -> gips
+note right of api: POST {GIPS_URL}/identities/${identityId}/consents
+gips --> api : Consent ID
+api --> ua : Return consent ID to User Agent
+
+== Capture document ==
+
+ua -> doc : Initialize doc capture client in the browser
+note right of ua: See call to 'DocserverVideo.initDocCaptureClient'
+
+doc -> gips: Data processing and aggregation on GIPS
+gips -> doc
+
+doc --> ua : Document feedback received
+
+alt If document capture successful
+  ua -> ua: Call client.finishSession() and proceed to "Capture Portrait"
+else If document capture failed (timeout or other capture error)
+  ua -> ua : Retry the document capture (close the video stream and repeat "Capture Document" section)
+end
+
+== Capture Portait ==
+ua -> api : Init liveness session
+note right of ua: POST {API_URL}/identity-proofing/session
+api -> gips: Create liveness session
+note right of api: POST {GIPS_URL}/identities/${identityId}/attributes/portrait/live-capture-session
+api --> ua : Return liveness session id
+ua -> bio : Start portrait capture
+note right of ua: See "BioserverVideo.initFaceCaptureClient" in the codebase
+bio --> ua : Receive portrait feedback
+
+alt If portait capture successful
+ua -> ua : Continue to "Poll identity status".
+else If portrait capture failed (timeout or other capture error)
+ua -> ua : Retry portait capture (close the video stream and repeat "Capture Portrait" section)
+end
+
+== Poll identity status ==
+loop
+ua -> api : Check identity status
+note right of ua: GET {API_URL}/identity-proofing/check-identity-status?identityId=${identityId} 
+api -> gips : Check identity status
+note right of api: GET {GIPS_URL}/identities/${identityId}/status
+
+gips --> api : Return identity status
+api --> ua : Return identity status
+
+alt When identity status is ready
+  ua -> api : Fetch proofings result 
+  note right of ua: GET {API_URL}/identity-proofing/get-identity?identityId=${identityId}
+end
+@enduml

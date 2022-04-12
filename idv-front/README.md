@@ -204,11 +204,9 @@ A single entry has the following format (the attributes of a single entry a desc
 
 The flow diagram below explains how this app interacts with its backend and in turn with IDEMIA's ID&V APIs:
 
-![Flow Diagram](doc/images/IDV-flow.png "Flow Diagram")
+![Flow Diagram](../idv-api/flow-chart.svg "Flow Diagram")
 
-The high-level architecture of this demo is shown below:
-
-![Architecture Diagram](doc/images/IDV-global-diagram.png "Architecture Diagram")
+Editor note: This diagram is built from `../idv-api/flow-chart.txt` and compiled with `plantuml -tsvg flow-chart.txt` 
 
 ### A note about SSL
 

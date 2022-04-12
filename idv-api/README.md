@@ -154,11 +154,9 @@ section.
 
 The flow diagram below explains how this app interacts with its backend and in turn with IDEMIA's ID&V APIs:
 
-![Flow Diagram](doc/images/IDV-flow.png "Flow Diagram")
+![Flow Diagram](flow-chart.svg "Flow Diagram")
 
-The high-level architecture of this demo is shown below:
-
-![Architecture Diagram](doc/images/IDV-global-diagram.png "Architecture Diagram")
+Editor note: This diagram is built from `flow-chart.txt` and compiled with `plantuml -tsvg flow-chart.txt` 
 
 ### A note about SSL
 
